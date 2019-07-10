@@ -126,18 +126,21 @@ AdUi.prototype.createAdContainer = function() {
       this.adContainerDiv, 'ima-ad-container');
   this.adContainerDiv.style.position = 'absolute';
   this.adContainerDiv.style.zIndex = 1111;
-  this.adContainerDiv.addEventListener(
-      'mouseenter',
-      this.showAdControls.bind(this),
-      false);
-  this.adContainerDiv.addEventListener(
-      'mouseleave',
-      this.hideAdControls.bind(this),
-      false);
+  // iOS "translates" mouseenter as click, so 1st click on ad player
+  // that takes place on a SKIP AD button is prevented.
+  if (!videojs.browser.IS_IOS) {
+      this.adContainerDiv.addEventListener(
+        'mouseenter',
+        this.showAdControls.bind(this),
+        false);
+      this.adContainerDiv.addEventListener(
+        'mouseleave',
+        this.hideAdControls.bind(this),
+        false);
+  }
   this.createControls();
   this.controller.injectAdContainerDiv(this.adContainerDiv);
 };
-
 
 /**
  * Create the controls.
